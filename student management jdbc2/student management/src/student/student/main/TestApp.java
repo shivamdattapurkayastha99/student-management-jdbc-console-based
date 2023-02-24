@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import student.student.controller.IStudentController;
 import student.student.dto.Student;
 import student.student.factory.StudentControllerFactory;
-
+import java.util.logging.Logger;
 public class TestApp {
 
 	public static void main(String[] args) {
@@ -17,30 +17,31 @@ public class TestApp {
 		Student studentRecord = null;
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		Logger logger = Logger.getLogger(TestApp.class.getName());
 		try {
 			while (true) {
-				System.out.println("# Select the operation to perform: ");
-				System.out.println(" 1. CREATE");
-				System.out.println(" 2. READ");
-				System.out.println(" 3. UPDATE");
-				System.out.println(" 4. DELETE");
-				System.out.println(" 5. EXIT");
-				System.out.print("Your options are: [1, 2, 3, 4, 5]: ");
+				logger.info("# Select the operation to perform: ");
+				logger.info(" 1. CREATE");
+				logger.info(" 2. READ");
+				logger.info(" 3. UPDATE");
+				logger.info(" 4. DELETE");
+				logger.info(" 5. EXIT");
+				logger.info("Your options are: [1, 2, 3, 4, 5]: ");
 				Integer option = Integer.parseInt(br.readLine());
 
 				studentController = StudentControllerFactory.getStudentController();
 				switch (option) {
 				case 1:
-					System.out.print("Enter the name: ");
+					logger.info("Enter the name: ");
 					name = br.readLine();
 
-					System.out.print("Enter the city: ");
+					logger.info("Enter the city: ");
 					city = br.readLine();
 
-					System.out.print("Enter the email: ");
+					logger.info("Enter the email: ");
 					email = br.readLine();
 
-					System.out.print("Enter the country: ");
+					logger.info("Enter the country: ");
 					country = br.readLine();
 
 					Student student = new Student();
@@ -51,32 +52,32 @@ public class TestApp {
 
 					status = studentController.save(student);
 					if (status.equalsIgnoreCase("success")) {
-						System.out.println("Record Inserted Successfully :)");
+						logger.info("Record Inserted Successfully :)");
 					} else if (status.equalsIgnoreCase("failure")) {
-						System.out.println("Record Insertion failed :(");
+						logger.info("Record Insertion failed :(");
 					} else {
-						System.out.println("Some problem occured!");
+						logger.info("Some problem occured!");
 					}
 
 					break;
 				case 2:
-					System.out.print("Enter the ID to fetch details: ");
+					logger.info("Enter the ID to fetch details: ");
 					id = Integer.parseInt(br.readLine());
 					studentRecord = studentController.findById(id);
 					if (studentRecord != null)
-						System.out.println(studentRecord);
+						logger.info(studentRecord.toString());
 					else
-						System.out.println("Record not available for the given id: " + id);
+						logger.info("Record not available for the given id: " + id);
 					break;
 
 				case 3:
-					System.out.print("Enter the ID of the record to be updated: ");
+					logger.info("Enter the ID of the record to be updated: ");
 					id = Integer.parseInt(br.readLine());
 					studentRecord = studentController.findById(id);
 					if (studentRecord != null) {
 						Student newStudent = new Student();
 						newStudent.setId(id);
-						System.out.print("Enter the new Student Name [Old Name is: " + studentRecord.getName() + "]: ");
+						logger.info("Enter the new Student Name [Old Name is: " + studentRecord.getName() + "]: ");
 						String newName = br.readLine();
 						if (newName == null || newName.equals("")) {
 							newStudent.setName(studentRecord.getName());
@@ -84,7 +85,7 @@ public class TestApp {
 							newStudent.setName(newName);
 						}
 
-						System.out.print(
+						logger.info(
 								"Enter the new Student email [Old email is: " + studentRecord.getEmail() + "]: ");
 						String newEmail = br.readLine();
 						if (newEmail == null || newEmail.equals("")) {
@@ -93,7 +94,7 @@ public class TestApp {
 							newStudent.setEmail(newEmail);
 						}
 
-						System.out.print("Enter the new Student City [Old City is: " + studentRecord.getCity() + "]: ");
+						logger.info("Enter the new Student City [Old City is: " + studentRecord.getCity() + "]: ");
 						String newCity = br.readLine();
 						if (newCity == null || newCity.equals("")) {
 							newStudent.setCity(studentRecord.getCity());
@@ -101,7 +102,7 @@ public class TestApp {
 							newStudent.setCity(newCity);
 						}
 
-						System.out.print(
+						logger.info(
 								"Enter the new Student Country [Old country is: " + studentRecord.getCountry() + "]: ");
 						String newCountry = br.readLine();
 						if (newCountry == null || newCountry.equals("")) {
@@ -112,38 +113,38 @@ public class TestApp {
 
 						status = studentController.updateById(newStudent);
 						if (status.equalsIgnoreCase("success")) {
-							System.out.println("Record Updated Successfully :)");
+							logger.info("Record Updated Successfully :)");
 						} else if (status.equalsIgnoreCase("failure")) {
-							System.out.println("Record Updation failed :(");
+							logger.info("Record Updation failed :(");
 						} else {
-							System.out.println("Some problem occured!");
+							logger.info("Some problem occured!");
 						}
 					}
 
 					else {
-						System.out.println("Record not available for the given id: " + id);
+						logger.info("Record not available for the given id: " + id);
 					}
 					break;
 
 				case 4:
-					System.out.print("Enter the ID to be deleted: ");
+					logger.info("Enter the ID to be deleted: ");
 					id = Integer.parseInt(br.readLine());
 					status = studentController.deleteById(id);
 					if (status.equalsIgnoreCase("success")) {
-						System.out.println("Record Deleted Successfully :)");
+						logger.info("Record Deleted Successfully :)");
 					} else if (status.equalsIgnoreCase("failure")) {
-						System.out.println("Record Deletion failed :(");
+						logger.info("Record Deletion failed :(");
 					} else {
-						System.out.println("Record not available for the given id to delete!");
+						logger.info("Record not available for the given id to delete!");
 					}
 
 					break;
 				case 5:
-					System.out.println("Thank you for using the application :)");
+					logger.info("Thank you for using the application :)");
 					System.exit(0);
 
 				default:
-					System.out.println("Please enter the given option for operation!");
+					logger.info("Please enter the given option for operation!");
 					
 					break;
 				}
